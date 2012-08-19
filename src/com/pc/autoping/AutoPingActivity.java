@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,9 +49,15 @@ public class AutoPingActivity extends Activity {
         }
         
         repeatSpinner = (Spinner) findViewById(R.id.repeat_spinner);
-        repeatSpinner.setSelection(3);
         intervalSpinner = (Spinner) findViewById(R.id.interval_spinner);
+        ArrayAdapter<CharSequence> repeatAdapter = CustomArrayAdapter.createFromResource(this, R.array.repeat_array, R.layout.spinner_text);
+        ArrayAdapter<CharSequence> intervalAdapter = CustomArrayAdapter.createFromResource(this, R.array.interval_array, R.layout.spinner_text);
+        repeatSpinner.setAdapter(repeatAdapter);
+        intervalSpinner.setAdapter(intervalAdapter);
+        repeatSpinner.setSelection(3);
         intervalSpinner.setSelection(1);
+        
+        
         pingButton = (ToggleButton) findViewById(R.id.ping_button);
         pingButton.setOnClickListener(new OnClickListener() {
         	@Override
@@ -174,4 +182,27 @@ public class AutoPingActivity extends Activity {
     	}
     }
     
+    static class CustomArrayAdapter<T> extends ArrayAdapter<T>
+    {
+    	public CustomArrayAdapter(Context ctx, T [] objects)
+    	{
+    		super(ctx, android.R.layout.simple_spinner_item, objects);
+    	}
+    	
+    	
+    	@Override
+    	public View getDropDownView(int position, View convertView, ViewGroup parent)
+    	{
+    		View view = super.getView(position, convertView, parent);
+    		
+    		TextView text = (TextView)view.findViewById(android.R.id.text1);
+    		text.setTextColor(Color.WHITE);
+    		text.setTextSize(20);
+    		text.setBackgroundColor(Color.BLACK);
+    		return view;
+    	}
+    }
+
+    
 }
+

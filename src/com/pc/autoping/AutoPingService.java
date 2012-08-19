@@ -93,7 +93,15 @@ public class AutoPingService extends Service {
 		    	}
 		    	int ind1 = pingResult.indexOf("time=");
 		    	int ind2 = pingResult.indexOf("ms");
-		    	int pingTime = (int) Double.parseDouble(pingResult.substring(ind1+5, ind2-1));
+		    	int pingTime = -1;
+		    	try
+		    	{
+		    		pingTime = (int) Double.parseDouble(pingResult.substring(ind1+5, ind2-1));
+		    	}
+		    	catch (NumberFormatException e)
+		    	{
+		    		//
+		    	}
 		    	in.close();
 		    	Intent pingResponse = new Intent();
 		    	pingResponse.setAction("com.pc.autoping.pingResponse");

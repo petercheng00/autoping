@@ -41,6 +41,7 @@
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="0.3"
+            android:background="#333333"
             android:textColor="@android:color/white"
             android:entries="@array/repeat_array"
             android:prompt="@string/repeat_prompt" />
@@ -56,6 +57,7 @@
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="0.3"
+            android:background="#333333"
             android:textColor="@android:color/white"
             android:entries="@array/interval_array"
             android:prompt="@string/interval_prompt" /> 
