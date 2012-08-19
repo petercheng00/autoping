@@ -2,6 +2,11 @@ package com.pc.autoping;
 
 import java.util.ArrayList;
 
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.LineAndPointRenderer;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYPlot;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,12 +31,15 @@ import android.widget.ToggleButton;
 public class AutoPingActivity extends Activity {
 	private AutoPingReceiver APReceiver;
 	boolean serviceRunning = false;
-	ToggleButton pingButton;
-	Spinner repeatSpinner;
-	Spinner intervalSpinner;
+	private ToggleButton pingButton;
+	private Spinner repeatSpinner;
+	private Spinner intervalSpinner;
+	private XYPlot pingPlot;
 	
-	ArrayList<Integer> pastFivePings;
-	ArrayList<Integer> pastPings;
+	private ArrayList<Integer> pastFivePings;
+	private ArrayList<Integer> pastPings;
+	private SimpleXYSeries pastPingsSeries;
+	
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,15 @@ public class AutoPingActivity extends Activity {
         	}
 	        pastPings.add(0);
         }
+        
+        pingPlot = (XYPlot) findViewById(R.id.pingPlot);
+        pastPingsSeries = new SimpleXYSeries("Ping");
+        pingPlot.disableAllMarkup();
+        pingPlot.setDomainLabel("");
+        pingPlot.setRangeLabel("");
+        pingPlot.addSeries(pastPingsSeries, LineAndPointRenderer.class, new LineAndPointFormatter(Color.BLACK, 0xff006400, 0xcc6b8e23));
+        pingPlot.setDomainStepValue(1);
+        pingPlot.setTicksPerRangeLabel(3);
         
         repeatSpinner = (Spinner) findViewById(R.id.repeat_spinner);
         intervalSpinner = (Spinner) findViewById(R.id.interval_spinner);
@@ -140,7 +157,7 @@ public class AutoPingActivity extends Activity {
 	    		{
 	    			totalPing += pastFivePings.get(i);
 	    			++totalValid;
-	    			historyText += (Double.toString(pastFivePings.get(i)) + "   "); 
+	    			historyText += (Double.toString(pastFivePings.get(i)) + "      "); 
 	    		}
 	    	}
 	    	int pingAverage = totalPing / totalValid;
@@ -160,6 +177,9 @@ public class AutoPingActivity extends Activity {
 	    	mAvgText.setText(Double.toString(pingAverage));
 	    	TextView mHistText = (TextView)findViewById(R.id.ping_history);
 	    	mHistText.setText(historyText);
+	    	
+	    	pastPingsSeries.setModel(pastPings, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY);
+	    	pingPlot.redraw();
     	}
     	else
     	{

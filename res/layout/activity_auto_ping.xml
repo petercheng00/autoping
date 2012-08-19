@@ -18,15 +18,25 @@
         android:id="@+id/ping_history"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1"
         android:textColor="@android:color/white"
         android:gravity="center" />
+    
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/pingPlot"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        title="Ping Results" />
 
     <EditText
         android:id="@+id/dest_address"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1"
         android:inputType="textUri"
         android:gravity="center"
         android:textColor="@android:color/white"
@@ -35,7 +45,7 @@
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.275" >
+        android:layout_weight="0.2" >
         <Spinner
             android:id="@+id/repeat_spinner"
             android:layout_height="match_parent"

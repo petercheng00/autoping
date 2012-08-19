@@ -20,13 +20,14 @@ public final class R {
     }
     public static final class id {
         public static final int average_ping=0x7f080000;
-        public static final int dest_address=0x7f080002;
-        public static final int interval_spinner=0x7f080005;
-        public static final int menu_settings=0x7f080007;
-        public static final int ping_button=0x7f080004;
+        public static final int dest_address=0x7f080003;
+        public static final int interval_spinner=0x7f080006;
+        public static final int menu_settings=0x7f080008;
+        public static final int pingPlot=0x7f080002;
+        public static final int ping_button=0x7f080005;
         public static final int ping_history=0x7f080001;
-        public static final int repeat_spinner=0x7f080003;
-        public static final int spinnerText=0x7f080006;
+        public static final int repeat_spinner=0x7f080004;
+        public static final int spinnerText=0x7f080007;
     }
     public static final class layout {
         public static final int activity_auto_ping=0x7f030000;
