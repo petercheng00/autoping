@@ -1,14 +1,10 @@
 package com.pc.autoping;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import android.R.string;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.method.ScrollingMovementMethod;
@@ -19,17 +15,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class AutoPingActivity extends Activity {
-	
-	private String currIPAddr;
-	private boolean pinging;
+	private AutoPingReceiver APReceiver;
+	boolean serviceRunning = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auto_ping);
-        currIPAddr = "";
-        pinging = false;
         
+        APReceiver = new AutoPingReceiver();
+        registerReceiver(APReceiver, new IntentFilter("com.pc.autoping.pingResponse"));
     	//TextView mOutputText = (TextView)findViewById(R.id.output_text);
     	//mOutputText.setMovementMethod(new ScrollingMovementMethod());
     }
@@ -46,54 +41,38 @@ public class AutoPingActivity extends Activity {
     			Context.INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(mDestAddress.getWindowToken(),0);
     	String destAddress = mDestAddress.getText().toString();
-    	try {
-			String destIP = new NetTask().execute(destAddress).get();
-			if (destIP != currIPAddr)
-			{
-				if (pinging)
-				{
-					//ask if want to cancel current pinging and start new one
-				}
-				else
-				{
-					currIPAddr = destIP;
-					beginPinging(currIPAddr);
-				}
-			}
-			else
-			{
-				addOutputText(destAddress + " is already being pinged!");
-			}					
-		} catch (Exception e1) {
-			addOutputText("Could not resolve address!");
-		}
     	
+    	Intent pingIntent = new Intent(this, AutoPingService.class);
+    	pingIntent.putExtra("hostName", destAddress);
+    	
+    	if (!serviceRunning) {
+    		startService(pingIntent);
+    	}
+        serviceRunning = true;
     }
     
-    private void beginPinging(String addr) {
-    	try {
-	    	String pingCmd = "ping -c 1 " + addr;
-	    	Runtime r = Runtime.getRuntime();
-	    	Process p = r.exec(pingCmd);
-	    	BufferedReader in = new BufferedReader(
-	    			new InputStreamReader(p.getInputStream()));
-	    	String pingResult = "";
-	    	String currLine;
-	    	while ((currLine = in.readLine()) != null) {
-	    		pingResult += currLine;
-	    	}
-	    	int ind1 = pingResult.indexOf("time=");
-	    	int ind2 = pingResult.indexOf("ms");
-	    	addOutputText(pingResult.substring(ind1+5, ind2+2));
-	    	in.close();
-    	}
-    	catch (IOException e) {
-    		System.out.println(e);
-    	}
+    public void stopPinging(View view) {
+    	stopService(new Intent(this, AutoPingService.class));
+    	serviceRunning = false;
     }
     
     private void addOutputText(String t) {
     	//TextView mOutputText = (TextView)findViewById(R.id.output_text);
     	//mOutputText.append(t + "\n");
     }
+    
+    private class AutoPingReceiver extends BroadcastReceiver
+    {
+    	@Override
+    	public void onReceive(Context context, Intent intent)
+    	{
+    		if (intent.getAction().equals("com.pc.autoping.pingResponse"))
+    		{
+    			double pingTime = intent.getDoubleExtra("pingTime", -1);
+    			TextView mOutputText = (TextView)findViewById(R.id.average_ping);
+    			mOutputText.setText(Double.toString(pingTime));
+    		}
+    	}
+    }
+    
 }
