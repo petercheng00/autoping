@@ -21,8 +21,10 @@ public class AutoPingService extends Service {
 	private String currIPAddr;
 	
 	private Timer pingTimer;
-    private long START_TIME = 1000;
+    private long START_TIME = 10;
     private long RETRY_TIME = 5000;
+    private int maxTimes = 0;
+    private int numRuns = 0;
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -45,13 +47,14 @@ public class AutoPingService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		String hostName = intent.getStringExtra("hostName");
-		Log.e(TAG, "hostaddr is " + hostName);
+		RETRY_TIME = intent.getLongExtra("interval", 5000);
+		maxTimes = intent.getIntExtra("repeat", -1);
 		try {
 			currIPAddr = new NetTask().execute(hostName).get();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Log.e(TAG, "hostaddr is " + currIPAddr);
+		numRuns = 0;
 		startPinging();
 		return START_NOT_STICKY;
 	}
@@ -71,6 +74,11 @@ public class AutoPingService extends Service {
 	private class pingTask extends TimerTask {
 		public void run() {
 			try {
+				if ((numRuns >= maxTimes) && (maxTimes != -1))
+				{
+					pingTimer.cancel();
+					return;
+				}
 		    	String pingCmd = "ping -c 1 " + currIPAddr;
 		    	Runtime r = Runtime.getRuntime();
 		    	Process p;
@@ -85,13 +93,13 @@ public class AutoPingService extends Service {
 		    	}
 		    	int ind1 = pingResult.indexOf("time=");
 		    	int ind2 = pingResult.indexOf("ms");
-		    	Log.e("ERROR", pingResult);
-		    	double pingTime = Double.parseDouble(pingResult.substring(ind1+5, ind2-1));
+		    	int pingTime = (int) Double.parseDouble(pingResult.substring(ind1+5, ind2-1));
 		    	in.close();
 		    	Intent pingResponse = new Intent();
 		    	pingResponse.setAction("com.pc.autoping.pingResponse");
 		    	pingResponse.putExtra("pingTime", pingTime);
 		    	sendBroadcast(pingResponse);
+		    	++numRuns;
 			} catch (IOException e) {
 				Intent pingResponse = new Intent();
 				pingResponse.setAction("com.pc.autoping.pingResponse");

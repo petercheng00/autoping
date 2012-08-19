@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     android:orientation="vertical" >
 
     <TextView
@@ -9,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
+        android:textSize="100dp"
         android:gravity="center" />
 
 
@@ -17,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.2"
+        android:textColor="@android:color/white"
         android:gravity="center" />
 
     <EditText
@@ -26,32 +29,34 @@
         android:layout_weight="0.2"
         android:inputType="textUri"
         android:gravity="center"
+        android:textColor="@android:color/white"
         android:text="@string/default_address" />
 
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.3" >
+        android:layout_weight="0.275" >
         <Spinner
             android:id="@+id/repeat_spinner"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="0.25"
+            android:layout_weight="0.3"
+            android:textColor="@android:color/white"
             android:entries="@array/repeat_array"
             android:prompt="@string/repeat_prompt" />
-        <Button android:id="@+id/ping_button"
+        <ToggleButton android:id="@+id/ping_button"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:onClick="startPinging"
-            android:text="@string/button_start"
-            android:background="@layout/buttonshape"
-            android:textColor = "#fff" />
+            android:layout_weight="0.4"
+            android:textColor="@android:color/white"
+            android:textOn="@string/button_stop"
+            android:textOff="@string/button_start" />
         <Spinner
             android:id="@+id/interval_spinner"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="0.25"
+            android:layout_weight="0.3"
+            android:textColor="@android:color/white"
             android:entries="@array/interval_array"
             android:prompt="@string/interval_prompt" /> 
     </LinearLayout>

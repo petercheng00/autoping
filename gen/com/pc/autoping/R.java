@@ -29,7 +29,6 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_auto_ping=0x7f030000;
-        public static final int buttonshape=0x7f030001;
     }
     public static final class menu {
         public static final int activity_auto_ping=0x7f070000;
@@ -37,11 +36,12 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f040000;
         public static final int button_start=0x7f040005;
+        public static final int button_stop=0x7f040006;
         public static final int default_address=0x7f040004;
         public static final int dest_address=0x7f040003;
-        public static final int interval_prompt=0x7f040007;
+        public static final int interval_prompt=0x7f040008;
         public static final int menu_settings=0x7f040001;
-        public static final int repeat_prompt=0x7f040006;
+        public static final int repeat_prompt=0x7f040007;
         public static final int title_activity_auto_ping=0x7f040002;
     }
     public static final class style {

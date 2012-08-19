@@ -6,6 +6,7 @@
     <string name="dest_address">Enter an Address</string>
     <string name="default_address">www.google.com</string>
     <string name="button_start">Start Pinging</string>
+    <string name="button_stop">Stop Pinging</string>
 
     <string name="repeat_prompt">Select Number of Times to Ping</string>
     <string-array name="repeat_array">
@@ -17,6 +18,7 @@
     
     <string name="interval_prompt">Select Interval Between Pings</string>
     <string-array name="interval_array">
+        <item>1 Second</item>
         <item>5 Seconds</item>
         <item>10 Seconds</item>
         <item>30 Seconds</item>
